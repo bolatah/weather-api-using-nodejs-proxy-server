@@ -14,8 +14,11 @@ const limiter = ratelimit({
     windowsMs: 10*60*1000, // 10 Mins
     max: 5 
 });
-app.use(limiter);
-app.set('trust proxy', 1)
+//app.use(limiter);
+//app.set('trust proxy', 1)
+
+
+app.use(express.json());
 
 // Set static folder
 app.use(express.static('public')); 
@@ -25,5 +28,6 @@ app.use('/api', require('./routes'));
 
 // enable cors
 app.use(cors());
+
 
 app.listen(PORT, () => console.log(`Server run port ${PORT}`));

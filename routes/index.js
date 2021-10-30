@@ -2,7 +2,7 @@ const url = require('url');
 const express = require('express');
 const router = express.Router();
 const needle = require ('needle');
-const apicache = require('apicache');
+const apicache = require('apicache'); 
 
 // Env vars
 const API_BASE_URL = process.env.API_BASE_URL;
@@ -14,7 +14,7 @@ let cache = apicache.middleware;
 
 router.get('/', cache('2 minutes'), async (req, res) => {
     try {
-        console.log();
+        console.log("api called");
 
         const params = new URLSearchParams({
             [API_KEY_NAME]:API_KEY_VALUE,
@@ -35,4 +35,31 @@ router.get('/', cache('2 minutes'), async (req, res) => {
         res.status(500).json({error});
     }
 });
+
+ 
+  
+  router.post("/contactMe", (req, res) => { 
+      let input = req.body ?? {};
+
+      console.log("contact me input", input)
+
+      if(!input.name || !input.email || !input.message){
+          res.status(400).send("Invalid data!!!!"); 
+          return;
+      }
+
+    const name = input.name;
+    const email = input.email;
+    const message = input.message; 
+    const mail = {
+      from: name,
+      to: "bolatah@bolatah.com",
+      subject: "Contact Form Submission",
+      html: `<p>Name: ${name}</p>
+             <p>Email: ${email}</p>
+             <p>Message: ${message}</p>`,
+    };
+   
+    res.status(200).json({status: "email sent", email: mail});
+  });
 module.exports = router
